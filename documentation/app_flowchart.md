@@ -1,14 +1,16 @@
 flowchart TD
-  Start[Landing Page]
-  SignUpPage[Sign Up Page]
-  SignInPage[Sign In Page]
-  AuthAPI[Authentication API Endpoint]
-  DashboardPage[Dashboard Page]
-  Start -->|Select Sign Up| SignUpPage
-  Start -->|Select Sign In| SignInPage
-  SignUpPage -->|Submit Credentials| AuthAPI
-  SignInPage -->|Submit Credentials| AuthAPI
-  AuthAPI -->|Success| DashboardPage
-  AuthAPI -->|Error| SignUpPage
-  AuthAPI -->|Error| SignInPage
-  DashboardPage -->|Click Logout| Start
+  Start[User Arrives At Landing Page]
+  Start -- Not Authenticated --> Auth[Sign In Or Sign Up]
+  Auth -- Successful Login --> Landing[Landing Page]
+  Landing -- Interact With AI Assistant --> AIChatbox[AI Assistant Chatbox]
+  AIChatbox -- Send Prompt To --> CreateProjectAPI[Api Projects Create With Ai]
+  CreateProjectAPI -- Returns Project And Professionals --> ProjectDisplay[Show AI Generated Project And Matches]
+  ProjectDisplay -- Select Professionals --> AddToCart[Add To Cart]
+  AddToCart -- Open Detail --> ProfessionalModal[Show Professional Detail Modal]
+  ProfessionalModal -- Proceed To Checkout --> Checkout[Checkout Page With Pre Filled Data]
+  Checkout -- Create Order --> CreateOrderAPI[Api Orders Create]
+  CreateOrderAPI -- Emit Event --> NotifyPros[Websocket New Order Notification]
+  CreateOrderAPI -- Record Order --> OrderRecord[Order Record Created]
+  OrderRecord -- Redirect Based On Role --> ClientDash[Client Dashboard]
+  OrderRecord -- Redirect Based On Role --> ProDash[Professional Dashboard]
+  OrderRecord -- Redirect Based On Role --> AdminPanel[Admin Panel]
