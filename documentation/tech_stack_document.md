@@ -1,90 +1,115 @@
-# Tech Stack Document
+# Tech Stack Document for Legia Pro Services MVP
 
-This document explains the key technologies chosen for the **codeguide-starter** project. It’s written in everyday language so anyone—technical or not—can understand why each tool was picked and how it supports the application.
+This document explains the technologies chosen for the Legia professional-services marketplace MVP. It’s written in everyday language so anyone can understand why each piece was picked and how it fits into the bigger picture.
 
 ## 1. Frontend Technologies
-The frontend is everything the user sees and interacts with. For this project, we’ve used:
+
+These tools power everything you see and interact with on the website or dashboard.
 
 - **Next.js (App Router)**
-  - A React framework that makes page routing, server-side rendering, and API routes very simple.
-  - Enhances user experience by pre-rendering pages on the server or at build time, leading to faster initial load.
-- **React 18**
-  - The underlying library for building user interfaces with reusable components.
-  - Provides a smooth, interactive experience thanks to its virtual DOM and modern hooks.
-- **TypeScript**
-  - A superset of JavaScript that adds types (labels for data).
-  - Helps catch errors early during development and makes the code easier to maintain.
-- **CSS (globals.css & theme.css)**
-  - **globals.css** applies base styles (fonts, colors, resets) across the entire app.
-  - **dashboard/theme.css** defines the look and feel specific to the dashboard area.
-  - This separation keeps styles organized and avoids accidental style conflicts.
+  - A React-based framework that handles page navigation, server rendering, and static pages out of the box.
+  - Makes the site fast, SEO-friendly, and easy to organize into sections like the landing page, user dashboards, and admin panel.
 
-By combining these tools, we have a clear structure (Next.js folders for pages and layouts), safer code (TypeScript), and flexible styling with vanilla CSS.
+- **TypeScript**
+  - A superset of JavaScript that adds type checking.
+  - Catches mistakes early in development, making the code more reliable without changing how the site looks or feels.
+
+- **Tailwind CSS**
+  - A utility-first CSS framework for styling your site.
+  - Lets developers build designs quickly by combining pre-built utility classes, ensuring a consistent look and feel.
+
+- **shadcn/ui**
+  - A collection of pre-built, customizable React components (buttons, forms, tables, modals, etc.).
+  - Speeds up UI development and keeps styling consistent across pages and features.
+
+- **Vercel AI SDK**
+  - Connects the AI Assistant chatbox on the landing page to Google’s Gemini model.
+  - Powers natural language interactions so users can generate project outlines and images through chat.
 
 ## 2. Backend Technologies
-The backend handles data, user accounts, and the logic behind the scenes. Our choices here are:
+
+These components run on the server, handle data, and make sure everything works behind the scenes.
 
 - **Next.js API Routes**
-  - Allows us to write server-side code (`route.ts` files) alongside our frontend in the same project.
-  - Runs on Node.js, so we can handle requests like sign-up, sign-in, and data fetching in one place.
-- **Node.js Runtime**
-  - The JavaScript environment on the server that executes our API routes.
-- **bcrypt** (npm package)
-  - A library for hashing passwords securely before storing them.
-  - Ensures that even if someone got access to our data, raw passwords aren’t visible.
-- **(Optional) NextAuth.js or JWT**
-  - While this starter kit shows a custom authentication flow, it can easily integrate services like NextAuth.js for email-based login or JWT (JSON Web Tokens) for stateless sessions.
+  - Built-in feature of Next.js that lets you write server code alongside your frontend.
+  - Hosts REST endpoints for core functions like creating projects, managing orders, processing payments, and sending notifications.
 
-These components work together to receive user credentials, verify or store them securely, manage sessions or tokens, and deliver protected data back to the frontend.
+- **PostgreSQL**
+  - A powerful, open-source relational database for storing structured data (users, projects, orders, payments, chat messages).
+  - Well-suited for complex relationships, like linking clients, professionals, and multi-term payments.
+
+- **Drizzle ORM**
+  - A lightweight, type-safe tool for talking to PostgreSQL from TypeScript.
+  - Ensures your database queries match your code’s types, preventing errors before they happen.
+
+- **Better Auth (Custom Authentication)**
+  - A bespoke sign-up, sign-in, and session system built into the app.
+  - Extended to support role-based access control (RBAC) for clients, professionals, and admins, plus KYC (Know Your Customer) checks.
+
+- **WebSockets (e.g., Socket.IO)**
+  - Enables real-time communication between the server and clients.
+  - Powers live order alerts and private chatrooms between clients and professionals.
 
 ## 3. Infrastructure and Deployment
-Infrastructure covers where and how we host the app, as well as how changes get delivered:
 
-- **Git & GitHub**
-  - Version control system (Git) and remote hosting (GitHub) keep track of all code changes and allow team collaboration.
-- **Vercel (or Netlify)**
-  - A popular hosting service optimized for Next.js, with one-click deployments and global content delivery.
-  - Automatically rebuilds and deploys the site whenever code is pushed to the main branch.
-- **GitHub Actions (CI/CD)**
-  - Automates tasks like linting (ESLint), formatting (Prettier), and running any tests you add.
-  - Ensures that only clean, tested code goes live.
+These choices keep the development and production environments stable, scalable, and easy to manage.
 
-Together, these tools provide a reliable, scalable setup where every code change is tested and deployed quickly, with minimal manual work.
+- **Docker**
+  - Containerizes the Next.js app, PostgreSQL database, and any additional services.
+  - Ensures everyone on the team and in production runs the same environment.
+
+- **Version Control with Git/GitHub**
+  - Tracks changes to the codebase, enables collaboration, and keeps a history of all updates.
+
+- **CI/CD (e.g., GitHub Actions)**
+  - Automatically builds, tests, and deploys the app when new code is pushed.
+  - Catches errors early and speeds up the release process.
+
+- **Hosting Platform (e.g., Vercel)**
+  - Optimized for Next.js apps, offering easy deployments, global edge caching, and automatic HTTPS.
 
 ## 4. Third-Party Integrations
-While this starter kit is minimal by design, it already includes or can easily add:
 
-- **bcrypt**
-  - For secure password hashing (included as an npm dependency).
-- **NextAuth.js** (optional)
-  - A full-featured authentication library supporting email/password, OAuth, and more.
-- **Sentry or LogRocket** (optional)
-  - For real-time error tracking and performance monitoring in production.
+These services extend the app’s capabilities without reinventing the wheel.
 
-These integrations help extend the app’s capabilities without building every feature from scratch.
+- **Vercel AI SDK**
+  - Handles communication with the Gemini model for the AI Assistant chatbox.
+
+- **Payment Gateways (Xendit, Midtrans, Tripay)**
+  - Supports multiple regional payment providers for greater flexibility.
+  - Abstracted behind a common interface so the admin can switch providers without code changes.
+
+- **Analytics Tools (optional)**
+  - Can be added later (e.g., Google Analytics, Mixpanel) to track user behavior, sign-ups, and order completions.
 
 ## 5. Security and Performance Considerations
-We’ve baked in several measures to keep users safe and the app running smoothly:
 
-Security:
-- Passwords are never stored in plain text—bcrypt hashes them with a random salt.
-- API routes can implement CSRF protection and input validation to block malicious requests.
-- Session tokens or cookies are marked secure and HttpOnly to prevent theft via JavaScript.
+Measures taken to protect data and keep the app fast.
 
-Performance:
-- Server-side rendering (SSR) and static site generation (SSG) in Next.js deliver pages faster.
-- Code splitting and lazy-loaded components ensure users only download what they need.
-- Global CSS and theme files are small and cached by the browser for quick repeat visits.
+- **Role-Based Access Control (RBAC)**
+  - Ensures only authorized users can access certain pages or perform specific actions (clients vs. professionals vs. admins).
 
-These strategies work together to give users a fast, secure experience every time.
+- **KYC Verification**
+  - Collects and verifies user documents before granting full marketplace access to professionals.
+
+- **Input Validation with Zod**
+  - Validates all incoming data on API routes to prevent malformed requests and security vulnerabilities.
+
+- **Centralized Logging and Error Handling**
+  - Captures errors in API routes and payment callbacks for easier debugging and auditing.
+
+- **Database Indexing and Caching**
+  - Adds indexes on frequently queried columns (e.g., location, service type) for faster lookups.
+  - Introduces caching (e.g., Next.js built-in cache or Redis) for static or rarely changing data to reduce database load.
 
 ## 6. Conclusion and Overall Tech Stack Summary
-In building **codeguide-starter**, we chose technologies that:
 
-- Align with modern web standards (Next.js, React, TypeScript).
-- Provide a clear, file-based project structure for rapid onboarding.
-- Offer built-in support for server-side rendering, API routes, and static assets.
-- Emphasize security through password hashing, session management, and safe defaults.
-- Enable easy scaling and future enhancements via modular code and optional integrations.
+We chose each technology to balance speed of development, reliability, and ease of maintenance:
 
-This stack strikes a balance between simplicity for newcomers and flexibility for experienced teams. It accelerates development of a secure authentication flow and a polished dashboard, while leaving room to plug in databases, test suites, and advanced features as the project grows.
+- **Frontend:** Next.js, TypeScript, Tailwind CSS, shadcn/ui, Vercel AI SDK for a fast, consistent, and interactive user interface.
+- **Backend:** Next.js API Routes, PostgreSQL, Drizzle ORM, Better Auth, WebSockets for a unified codebase that handles data, authentication, and real-time features seamlessly.
+- **Infrastructure:** Docker, Git/GitHub, CI/CD pipelines, and a hosting platform like Vercel for smooth deployments and consistent environments.
+- **Integrations:** AI chat (Vercel AI SDK) and multiple payment providers (Xendit, Midtrans, Tripay) to power the core marketplace features.
+- **Security & Performance:** RBAC, KYC, input validation, logging, indexing, and caching to protect user data and ensure a smooth experience.
+
+Altogether, this tech stack provides a robust, production-ready foundation that’s easy to extend. It aligns perfectly with the Legia marketplace’s goals: fast setup, rich user experiences, secure transactions, and the flexibility to grow and adapt over time.
